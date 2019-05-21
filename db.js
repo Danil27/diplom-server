@@ -1,17 +1,13 @@
 var mysql = require('mysql');
-
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '1234',
     database: 'diplomdb'
 });
 
-var connection;
 
 function handleDisconnect() {
-    connection = mysql.createConnection(db_config); // Recreate the connection, since
-                                                    // the old one cannot be reused.
 
     connection.connect(function (err) {                 // The server is either down
         if (err) {                                     // or restarting (takes a while sometimes).
@@ -19,7 +15,7 @@ function handleDisconnect() {
             setTimeout(handleDisconnect, 2000);     // We introduce a delay before attempting to reconnect,
         }                                            // to avoid a hot loop, and to allow our node script to
     });                                              // process asynchronous requests in the meantime.
-                                                    // If you're also serving http, display a 503 error.
+    // If you're also serving http, display a 503 error.
     connection.on('error', function (err) {
         console.log('db error', err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
@@ -35,12 +31,13 @@ handleDisconnect();
 module.exports = connection;
 
 
+
 /*
 connection.connect();
 
 connection.query('SELECT * FROM employees', function (error, results, fields) {
     if (error) throw error;
-    var i = 2;
+    var i = 0;
     console.log('id: ' + results[i].id);
     console.log('first_name: ' + results[i].first_name);
     console.log('last_name: ' + results[i].last_name);
