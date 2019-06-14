@@ -29,24 +29,3 @@ function handleDisconnect() {
 handleDisconnect();
 
 module.exports = connection;
-
-
-
-/*
-connection.connect();
-
-connection.query('SELECT * FROM employees', function (error, results, fields) {
-    if (error) throw error;
-    var i = 0;
-    console.log('id: ' + results[i].id);
-    console.log('first_name: ' + results[i].first_name);
-    console.log('last_name: ' + results[i].last_name);
-    console.log('birthday: ' + results[i].birthday);
-    console.log('address: ' + results[i].address);
-    console.log('phone_number: ' + results[i].phone_number);
-    console.log('city: ' + results[i].city);
-    console.log('email: ' + results[i].email);
-});
-
-connection.end();
-*/

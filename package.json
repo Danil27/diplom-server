@@ -6,6 +6,7 @@
     "aws-sdk": "latest",
     "bcryptjs": "^2.4.3",
     "body-parser": "latest",
+    "brain.js": "^1.6.1",
     "cors": "^2.8.5",
     "ejs": "latest",
     "express": "latest",
