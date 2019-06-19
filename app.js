@@ -68,27 +68,23 @@ app.get('/checkData', (req, res) => {
 });
 
 app.post('/addAnswers', (req, res) => {
-    //INSERT INTO diplomdb.answers ( answer, questions_id) VALUES (1,1);
-
-
-    // db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES ('" + 1 + "," + 1 + "');", function (error, results, fields) {
-    //     if (error) {
-    //         throw error;
-    //     }
-    // });
-
-    // console.log("1111111111111");
 
     for (i in req.body) {
-        //console.log(i + ": " + req.body[i]);
         db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES (" + req.body[i] + "," + i + ");", function (error, results, fields) {
             if (error) {
                 throw error;
             }
         });
     }
+});
 
-
+app.post('/addUser', (req, res) => {
+    db.query("INSERT INTO diplomdb.users (login,password,post,first_name,last_name) VALUES ('" + req.body.username + "','" + req.body.password + "', 'user','" + req.body.firstname + "','" + req.body.lastname + "');",
+        function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+        });
 });
 
 app.get('/check', (req, res) => {
@@ -98,6 +94,10 @@ app.get('/check', (req, res) => {
         }
         res.send(results);
     });
+});
+
+app.get('/setText', (req, res) => {
+    console.log(req.query.text);
 });
 
 app.post("/login", validatePayloadMiddleware, (req, res) => {
