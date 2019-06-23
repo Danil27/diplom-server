@@ -1,4 +1,5 @@
 // Include the cluster module
+var nn = require('./nn');
 var cluster = require('cluster');
 var db = require('./db');
 var express = require('express');
@@ -6,6 +7,7 @@ var bodyParser = require('body-parser');
 const cors = require('cors');
 var app = express();
 var session = require('express-session');
+
 
 var usersession;
 
@@ -97,7 +99,8 @@ app.get('/check', (req, res) => {
 });
 
 app.get('/setText', (req, res) => {
-    console.log(req.query.text);
+    s = nn(req.query.text);
+    res.send(s);
 });
 
 app.post("/login", validatePayloadMiddleware, (req, res) => {
