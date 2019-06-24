@@ -10,7 +10,12 @@ const config = {
     decayRate: 0.999,
 };
 
-var net = new brain.NeuralNetwork(config);
+//анализ текста
+var textanalysis = new brain.NeuralNetwork(config);
+//анализ теста
+var testanalysis = new brain.NeuralNetwork(config);
+
+//считывание словаря из файла
 var slovar = fs.readFileSync("steming.txt", "utf8").toString().split("\r\n");
 
 function vectorFormation(str) {
@@ -67,8 +72,8 @@ t6 = "проектной технической эксплуатационной
     " качество ведения необходимой исполнительной журналов актов ведомостей маршрутных карт наличие нормативной технической";
 o6 = [0, 0, 0, 0, 0, 1];
 
-
-net.train([
+//обучение сети для анализа текста
+textanalysis.train([
     { input: vectorFormation(t1), output: o1 },
     { input: vectorFormation(t2), output: o2 },
     { input: vectorFormation(t3), output: o3 },
@@ -78,9 +83,12 @@ net.train([
     { input: vectorFormation(""), output: [0, 0, 0, 0, 0, 0] }
 ]);
 
-module.exports = function (text) {
-    s = net.run(vectorFormation(text));
+module.exports.text = function (text) {
+    s = textanalysis.run(vectorFormation(text));
     return s;
 };
 
-
+// module.exports.traintest = function (test, desription) {
+//     this.traintest.run()
+//     console.log(test + desription);
+// }

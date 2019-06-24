@@ -71,13 +71,31 @@ app.get('/checkData', (req, res) => {
 
 app.post('/addAnswers', (req, res) => {
 
-    for (i in req.body) {
-        db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES (" + req.body[i] + "," + i + ");", function (error, results, fields) {
+    for (i in req.body.test) {
+        db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES (" + req.body.test[i] + "," + i + ");", function (error, results, fields) {
             if (error) {
                 throw error;
             }
         });
     }
+
+    db.query("INSERT INTO diplomdb.violation (checklist_id, description) VALUES (" + 1 + ",'" + req.body.description + "');", function (error, results, fields) {
+        if (error) {
+            throw error;
+        }
+    });
+});
+
+
+app.post('/analysisCheckList', (req, res) => {
+    test = req.body;
+    var testarr = [];
+    for (var i = 0; i < 10; i++) {
+        testarr.push(i);
+    }
+    //console.log(testarr + " des " + test.description);
+    nn.traintest(testarr, test.description);
+
 });
 
 app.post('/addUser', (req, res) => {
@@ -99,7 +117,7 @@ app.get('/check', (req, res) => {
 });
 
 app.get('/setText', (req, res) => {
-    s = nn(req.query.text);
+    s = nn.text(req.query.text);
     res.send(s);
 });
 
