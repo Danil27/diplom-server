@@ -71,8 +71,27 @@ app.get('/checkData', (req, res) => {
 
 app.post('/addAnswers', (req, res) => {
 
-    for (i in req.body.test) {
-        db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES (" + req.body.test[i] + "," + i + ");", function (error, results, fields) {
+    test = req.body;
+    delete test.description;
+    description = req.body.description;
+    var testarr = [];
+    var violationId = [];
+
+    for (var i = 0; i < 10; i++) {
+        violationId[i] = 0;
+    }
+
+    for (i in test) {
+        if (test[i] == "true") {
+            testarr.push(1);
+        } else {
+            testarr.push(0)
+        }
+    }
+
+    console.log("test " + testarr);
+    for (i in test) {
+        db.query("INSERT INTO diplomdb.answers (answer, questions_id) VALUES (" + test[i] + "," + i + ");", function (error, results, fields) {
             if (error) {
                 throw error;
             }
@@ -84,17 +103,41 @@ app.post('/addAnswers', (req, res) => {
             throw error;
         }
     });
+
+    db.query("SELECT id FROM diplomdb.violation ORDER BY id DESC LIMIT 1", function (error, results, fields) {
+        if (error) {
+            throw error;
+        }
+        if (results.id < 10) {
+            violationId[results.id] = 1;
+        }
+    })
+
+    nn.traintest(testarr, violationId);
 });
 
 
 app.post('/analysisCheckList', (req, res) => {
     test = req.body;
+    delete test.description;
     var testarr = [];
-    for (var i = 0; i < 10; i++) {
-        testarr.push(i);
+
+    for (i in test) {
+        if (test[i] == "true") {
+            testarr.push(1);
+        } else {
+            testarr.push(0)
+        }
     }
-    //console.log(testarr + " des " + test.description);
-    nn.traintest(testarr, test.description);
+    var id = nn.analysistest(testarr);
+    console.log(id);
+    db.query("SELECT description FROM diplomdb.violation WHERE id=" + id + ";", function (error, results, fields) {
+        if (error) {
+            throw error;
+        }
+        res.send(results[0]);
+        console.log(results[0].description);
+    })
 
 });
 

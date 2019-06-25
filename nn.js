@@ -13,7 +13,7 @@ const config = {
 //анализ текста
 var textanalysis = new brain.NeuralNetwork(config);
 //анализ теста
-var testanalysis = new brain.NeuralNetwork(config);
+var testanalysis;
 
 //считывание словаря из файла
 var slovar = fs.readFileSync("steming.txt", "utf8").toString().split("\r\n");
@@ -88,7 +88,23 @@ module.exports.text = function (text) {
     return s;
 };
 
-// module.exports.traintest = function (test, desription) {
-//     this.traintest.run()
-//     console.log(test + desription);
-// }
+module.exports.traintest = function (test, desription) {
+    testanalysis = new brain.NeuralNetwork(config);
+
+    testanalysis.train([
+        { input: test, output: desription }
+    ])
+}
+
+module.exports.analysistest = function (test) {
+    result = testanalysis.run(test);
+    var max = 0;
+    var ind;
+    for (var i = 0; i < 10; i++) {
+        if (max < result[i]) {
+            max = result[i];
+            inx = i;
+        }
+    }
+    return inx;
+}
